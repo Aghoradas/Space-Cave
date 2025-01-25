@@ -13,9 +13,11 @@ public:
     std::string item_name;
     std::string item_descrip;
     std::string item_key;
+    bool        visible = false;
     bool        wearable = false;
     bool        onOff = false;
     int         field_key = 0000;
+
 
     ItemData(){};
 
@@ -64,38 +66,39 @@ public:
     void look_item() {
         std::cout << "\n\n\tLooking at the item..." << std::endl;
         std::cout << item_descrip << std::endl;
+        std::cout << "[press enter]";
+        std::cin.get();
     }
-
 };
 
-typedef std::vector<std::shared_ptr<ItemData>> vItem_t;
 
-std::shared_ptr<vItem_t> load_items(){
-    std::shared_ptr<vItem_t> worldItems(new vItem_t);
-
-    std::shared_ptr<ItemData> nothing(std::make_shared<ItemData>(
-        "sword",
-        "a crude sword",
-        "sword"));
-    worldItems->emplace_back(nothing);
+std::vector<std::shared_ptr<ItemData>> load_items(){
+    std::vector<std::shared_ptr<ItemData>> worldItems;
+    std::shared_ptr<ItemData> spoon(std::make_shared<ItemData>(
+        "spoon",
+        "a crude spoon",
+        "spoon"));
+        spoon->visible = true;
+    worldItems.emplace_back(spoon);
 
     std::shared_ptr<ItemData> cot(std::make_shared<ItemData>(
         "A small "+GF+"cot"+DEF,
         "Its a dingy white cot. Its probably as old as this prison.",
         "cot"));
-    worldItems->emplace_back(cot);
+        cot->visible = true;
+    worldItems.emplace_back(cot);
 
     std::shared_ptr<ItemData> forcefield(std::make_shared<ItemData>(
         "a forcefield",
         "This thing surrounds this small prison yard. Its so powerful that can you hear it.",
         "forcefield"));
-    worldItems->emplace_back(forcefield);
+    worldItems.emplace_back(forcefield);
     
     std::shared_ptr<ItemData> cyan_key(std::make_shared<ItemData>(
         "a key-"+CF+"card"+DEF,
         "This card has a cyan glow. It will probably come in handy later.",
         "key"));
     //cyan_key->field_key = 1001;
-    worldItems->emplace_back(cyan_key);
+    worldItems.emplace_back(cyan_key);
     return worldItems;
 }
