@@ -1,4 +1,7 @@
 #pragma once
+#include <string>
+#include <map>
+#include "space_items.hpp"
 
 class Npc {
 private:

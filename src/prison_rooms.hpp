@@ -22,7 +22,7 @@ public:
 	  : opened(open)
 	  , locked(lock)
 	  , key_code(key) {}
-
+/*
   nlohmann::json to_json() const {
 	return {{"opened",   opened},
 			{"locked",   locked},
@@ -34,7 +34,7 @@ public:
 			j.at("locked").get<bool>(),
 			j.at("key_code").get<int>()};
   }
-
+*/
   bool closed() {
 	if (!opened) {
 	  return true;

@@ -1,6 +1,3 @@
-#include "json.hpp"
-#include <algorithm>
-#include <iostream>
 #include <map>
 #include <random>
 #include <sstream>
@@ -10,6 +7,7 @@
 #include <unordered_map>
 #include <unordered_set>
 #include <vector>
+#include "json.hpp"
 
 #ifdef __linux__
 void cls() { system("clear"); }
@@ -40,8 +38,8 @@ void lower_case(std::string &command) {
 // hpp files are included after #ifdefs, font colors, and rand_range so they
 // can utilize their code.
 #include "space_items.hpp"
-#include "space_fight.hpp"
 #include "character_file.hpp"
+#include "space_fight.hpp"
 #include "stories.hpp"
 
 std::vector<std::string> commandTerminal(Character &player) {
@@ -422,7 +420,7 @@ Character action_commands(std::vector<std::string> &com_line, Character &player,
       break;
     }
     case fight: {
-      fight_mech(player, com_line);
+      fight_mech(player, player.location->npc_players[com_line.at(1)], com_line);
       break;
     }
     default: {

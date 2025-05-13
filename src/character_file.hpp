@@ -1,5 +1,8 @@
 #pragma once
+#include "json.hpp"
+#include "space_items.hpp"
 #include "prison_rooms.hpp"
+#include <string>
 
 class Character {
 private:
@@ -71,18 +74,18 @@ public:
   }
 
   std::string health_amount() {
-	std::string draw_health;
-	if (health != 0) {
-		for (int h = 0; h < health; h++) {
-		draw_health = draw_health + "#";
-	  } 
-	} else {
-		cls();
-		std::cout << "Game Over!" << std::endl;
-		std::cout << "\n\n[press enter]";
-		std::cin.get();
-	}
-	return draw_health;
+    std::string draw_health;
+    if (health != 0) {
+      for (int h = 0; h < health; h++) {
+      draw_health = draw_health + "#";
+      } 
+    } else {
+      cls();
+      std::cout << "Game Over!" << std::endl;
+      std::cout << "\n\n[press enter]";
+      std::cin.get();
+    }
+    return draw_health;
   }
 
   void display() {

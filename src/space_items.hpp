@@ -41,7 +41,7 @@ public:
                 ,onOff(on)
                 ,field_key(key) {}
 
-    nlohmann::json to_json() const {
+/*    nlohmann::json to_json() const {
         return {
             {"item_name", item_name},
             {"item_descrip", item_descrip},
@@ -62,7 +62,7 @@ public:
             j.at("field_key").get<int>()
         };
     }
-
+*/
     void look_item() {
         std::cout << "\n\n\tLooking at the item..." << std::endl;
         std::cout << item_descrip << std::endl;
