@@ -11,7 +11,7 @@
 
 #ifdef __linux__
 void cls() { system("clear"); }
-#elif win32
+#elif _win32
 void cls() { system("cls"); }
 #endif
 
@@ -140,7 +140,6 @@ void drop_mech(std::vector<std::string> &comLineCharacter, Character &player) {
   } else {
     std::cout << "Nothing to drop." << std::endl;
   }
-  return;
 }
 
 Character get_mech(std::vector<std::string> &com_line, Character &player,
@@ -187,7 +186,7 @@ void find_mech(std::vector<std::string> &com_line, Character &player) {
     std::cout << "Searching around.";
     std::cout.flush();
     std::this_thread::sleep_for(std::chrono::seconds(1));
-    int search_number = rand_range(0, (player.location->room_items.size() * 2));
+    size_t search_number = rand_range(0, (player.location->room_items.size() * 2));
     if ((player.location->room_items.size() - 1) >= search_number &&
         !player.location->room_items[search_number]->visible) {
       std::cout << "\nYou found: "
@@ -207,7 +206,6 @@ void find_mech(std::vector<std::string> &com_line, Character &player) {
   } else if (com_line.size() > 1) {
     std::string object = com_line[1];
     std::cout << "Seaching for " << object << "..\n";
-    sleep(0);
     enum class Target { exit, object };
     std::map<std::string, Target> findTarget = {{"exit", Target::exit},
                                                 {object, Target::object}};
@@ -224,7 +222,6 @@ void find_mech(std::vector<std::string> &com_line, Character &player) {
       break;
 
     case Target::object:
-      // std::this_thread::sleep_for(std::chrono::seconds(1));
       for (const auto &item : player.location->room_items) {
         std::cout << ".";
         if (item->item_key == object) {
@@ -269,55 +266,57 @@ void look_mech(std::vector<std::string> &com_line, Character &player,
     break;
   }
   case 2: {
-    if (com_line[1] == "self") {
+    std::string selection = com_line.at(1);
+    if (selection == "self") {
       player.display();
       break;
-    } else if (com_line[1] == "forcefield" &&
+    } else if (selection == "forcefield" &&
                player.location->room_name == "Outside..") {
       firstStory(player, rooms_map);
-    } else if (player.location->exits.contains(com_line[1])) {
-      std::string selected = com_line[1];
-      if (player.location->doors.contains(selected)) {
-        if (player.location->doors[selected]->closed() &&
-            !player.location->doors[selected]->window()) {
+    } else if (player.location->exits.contains(selection)) {
+      if (player.location->doors.contains(selection)) {
+        if (player.location->doors[selection]->closed() &&
+            !player.location->doors[selection]->window()) {
           std::cout << "\nYou see nothing. The door is closed.\n" << std::endl;
           return;
-        } else if (!player.location->doors[selected]->closed()) {
-          int direction = player.location->exits[com_line[1]];
-          std::cout << "\nYou look: " << com_line[1] << std::endl;
+        } else if (!player.location->doors[selection]->closed()) {
+          int direction = player.location->exits[selection];
+          std::cout << "\nYou look: " << selection << std::endl;
           std::cout << "\n"
                     << rooms_map[direction]->near_room_info << std::endl;
-        } else if (!player.location->doors[selected]->closed() &&
-                   player.location->doors[selected]->window()) {
-          int direction = player.location->exits[com_line[1]];
-          std::cout << "\nThrough bars you look: " << com_line[1] << std::endl;
+        } else if (player.location->doors[selection]->closed() &&
+                   player.location->doors[selection]->window()) {
+          int direction = player.location->exits[selection];
+          std::cout << "\nThrough bars you look: " << selection << std::endl;
           std::cout << "\n"
                     << rooms_map[direction]->near_room_info << std::endl;
+        } else {
+          std::cout << "Error occured.." << std::endl;
         }
       } else {
-        int direction = player.location->exits[com_line[1]];
-        std::cout << "\nYou look: " << com_line[1] << std::endl;
+        int direction = player.location->exits[selection];
+        std::cout << "\nYou look: " << selection << std::endl;
         std::cout << "\n" << rooms_map[direction]->near_room_info << std::endl;
       }
       std::cout << "\n[press enter]";
       std::cin.get();
-
     } else if (player.heldItem != nullptr) {
-      if (com_line[1] == player.heldItem->item_key) {
+      if (selection == player.heldItem->item_key) {
         player.heldItem->look_item();
       }
-    } else if (player.location->npc_players.contains(com_line[1])) {
-      std::string other = com_line[1];
+    } else if (player.location->npc_players.contains(selection)) {
+      std::string other = selection;
       player.location->npc_players[other].look_details();
       std::cout << "\n[press enter]\n";
       std::cin.get();
     } else {
       for (auto &item : player.location->room_items) {
-        if (item->item_key == com_line[1]) {
+        if (item->item_key == selection) {
           item->look_item();
         }
       }
     }
+    break;
   }
   default: {
     break;
@@ -383,7 +382,7 @@ Character action_commands(std::vector<std::string> &com_line, Character &player,
       break;
     }
     case drop: {
-      if (com_line.size() > 1) {
+      if (com_line.size() >= 1) {
         drop_mech(com_line, player);
       } else {
         std::cout << "\nNothing to drop.\n" << std::endl;

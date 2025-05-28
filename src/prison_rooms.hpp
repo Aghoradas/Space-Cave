@@ -1,5 +1,6 @@
 #pragma once
 #include "space_npc.hpp"
+#include <unordered_map>
 
 class RoomDoor {
 private:
@@ -174,18 +175,18 @@ public:
   }
 
   std::shared_ptr<SpaceRoom> get_location(std::string &map_area,
-										  std::shared_ptr<SpaceRoom> &location,
+	  		  std::shared_ptr<SpaceRoom> &location,
 					std::map<std::string, std::vector<std::shared_ptr<SpaceRoom>>> &world_map) {
-	for (auto &area_rooms : world_map) {
-	  int room_number = 0;
-	  for (auto &room : area_rooms.second) {
-		if (room->room_name == location->room_name) {
-		  return world_map[map_area].at(room_number);
-		}
-		room_number++;
-	  }
-	}
-	return location;
+    for (auto &area_rooms : world_map) {
+      int room_number = 0;
+      for (auto &room : area_rooms.second) {
+        if (room->room_name == location->room_name) {
+          return world_map[map_area].at(room_number);
+        }
+        room_number++;
+      }
+    }
+    return location;
   }
 
   void display() {
@@ -203,9 +204,9 @@ public:
 	if (!room_items.empty()){
 	  cout << "\nItems: \n";
 	  for (auto item : room_items) {
-		if (item->visible) {
-		  cout << "    - " << item->item_name << endl;
-		}
+      if (item->visible) {
+        cout << "    - " << item->item_name << endl;
+      }
 	  }
 	}
 
