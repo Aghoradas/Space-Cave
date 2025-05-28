@@ -300,7 +300,6 @@ void look_mech(std::vector<std::string> &com_line, Character &player,
       }
       std::cout << "\n[press enter]";
       std::cin.get();
-
     } else if (player.heldItem != nullptr) {
       if (selection == player.heldItem->item_key) {
         player.heldItem->look_item();
