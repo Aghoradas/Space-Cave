@@ -1,4 +1,6 @@
 #pragma once
+#include "prison_rooms.hpp"
+#include "character_file.hpp"
 
 Character firstStory(Character &player, std::vector<std::shared_ptr<SpaceRoom>> &room_map) {
     if (player.heldItem->item_key == "key") {
