@@ -302,8 +302,10 @@ void look_mech(std::vector<std::string> &com_line, Character &player,
       std::cout << "\n[press enter]";
       std::cin.get();
 
-    } else if (com_line[1] == player.heldItem->item_key) {
-      player.heldItem->look_item();
+    } else if (player.heldItem != nullptr) {
+      if (com_line[1] == player.heldItem->item_key) {
+        player.heldItem->look_item();
+      }
     } else if (player.location->npc_players.contains(com_line[1])) {
       std::string other = com_line[1];
       player.location->npc_players[other].look_details();
@@ -313,7 +315,6 @@ void look_mech(std::vector<std::string> &com_line, Character &player,
       for (auto &item : player.location->room_items) {
         if (item->item_key == com_line[1]) {
           item->look_item();
-          return;
         }
       }
     }
